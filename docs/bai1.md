@@ -2,19 +2,18 @@
 Họ tên: Nguyễn Thị Quỳnh Thơ              MSSV: dtc245340007              Lớp: ĐH CNTT
 
 ## 1. Cài đặt
-*(Ảnh chụp kết quả terminal chạy lệnh `dotnet --version`, `git --version` và `dotnet run` chương trình HelloPtudpt)*
+Kết quả kiểm tra môi trường chạy lệnh `dotnet --version`:
+- `.NET SDK`: 10.0.201
+- `Git`: 2.56.0.windows.2
 
-- Kết quả kiểm tra phiên bản:
-  - `.NET SDK`: 10.0.201
-  - `Git`: 2.56.0.windows.2
-  - Kết quả chạy thử: `Hello, World!`
+![Kết quả kiểm tra .NET 10](images/step1_version.png)
 
 ## 2. MepDemo (Bước 7)
 ### Trả lời 3 câu hỏi:
 1. **Ở MEP 3 (Hàng đợi công việc - Queue-based), mỗi bài nộp sub-x được mấy worker xử lý?**
    - Mỗi bài nộp chỉ được duy nhất **một** worker nhận và xử lý (các worker chia nhau công việc cạnh tranh, đảm bảo không bị xử lý trùng lặp).
 2. **Ở MEP 4 (Xuất bản - Đăng ký / Publish-Subscribe), một sự kiện được gửi tới mấy dịch vụ?**
-   - Một sự kiện phát ra được gửi tới **tất cả (cả 3)** dịch vụ đã đăng ký nhận sự kiện đó (ví dụ: NotificationService, AnalyticsService, AuditService).
+   - Một sự kiện phát ra được gửi tới **tất cả (cả 3)** dịch vụ đã đăng ký nhận sự kiện đó (NotificationService, AnalyticsService, AuditService).
 3. **Mô tả 1 câu cho mỗi MEP trong 5 mô hình trao đổi thông điệp:**
    - **MEP 1 (Request-Response):** Bên gửi phát một yêu cầu và chờ đợi phản hồi trả về từ bên nhận trước khi tiếp tục.
    - **MEP 2 (One-Way / Fire-and-Forget):** Bên gửi chỉ phát thông điệp đi và tiếp tục ngay công việc mà không cần chờ đợi phản hồi hay kết quả xử lý.
@@ -23,7 +22,9 @@ Họ tên: Nguyễn Thị Quỳnh Thơ              MSSV: dtc245340007          
    - **MEP 5 (Streaming):** Dữ liệu được truyền liên tục thành một dòng các phần tử nhỏ theo thời gian thực giữa hai đầu giao tiếp mà không cần đóng mở kết nối liên tục.
 
 ## 3. BasicWebApi (Bước 8)
-*(Ảnh chụp kiểm thử API bằng REST Client với các trường hợp 200 OK, 201 Created, 400 Bad Request)*
+Kiểm thử gửi request qua `requests.http` bằng REST Client, server trả về mã `201 Created`:
+
+![Kết quả kiểm thử REST Client 201 Created](images/rest_client_201.png)
 
 ### Trả lời 3 câu hỏi mục 8.4:
 1. **Hai dòng `builder.Services.AddSingleton...` và `var app = builder.Build();` – dòng nào phải đứng trước? Vì sao?**
@@ -36,7 +37,13 @@ Họ tên: Nguyễn Thị Quỳnh Thơ              MSSV: dtc245340007          
    - Vì theo chuẩn HTTP RESTful, mã trạng thái `201 Created` biểu thị rằng một tài nguyên mới vừa được tạo thành công trên máy chủ và thông thường đi kèm theo header `Location` chỉ dẫn địa chỉ URL để truy cập tài nguyên vừa tạo, trong khi `200 OK` chỉ là phản hồi thành công chung mà không khẳng định việc tạo mới tài nguyên.
 
 ## 4. MiniDistributedSystem (Bước 9)
-*(Ảnh chụp màn hình 2 terminal chạy song song: Terminal 1 chạy `Submission.Api`, Terminal 2 chạy `Submission.Client`)*
+Chạy song song 2 tiến trình: `Submission.Api` (Máy chủ) và `Submission.Client` (Máy khách):
+
+- **Tiến trình máy chủ (Submission.Api):**
+![Submission.Api](images/api_running.png)
+
+- **Tiến trình máy khách (Submission.Client):**
+![Submission.Client](images/client_running.png)
 
 ### Trả lời 3 câu hỏi mục 9:
 1. **Client gọi những endpoint nào của API? Mỗi lần gọi là một cặp request–response gồm method, URL, mã trạng thái gì?**
@@ -63,6 +70,9 @@ Họ tên: Nguyễn Thị Quỳnh Thơ              MSSV: dtc245340007          
   - `Client --(HTTP GET /api/assignments)--> Api` : Request-Response (Lấy danh sách các bài tập).
   - `Client --(HTTP POST /api/submissions)--> Api` : Request-Response (Gửi thông tin nộp bài, nhận về Guid và trạng thái `received`).
   - `Client --(HTTP GET /api/submissions/{id:guid})--> Api` : Request-Response (Kiểm tra và đọc lại thông tin chi tiết bài nộp vừa tạo).
+
+### Kết quả chạy hoàn chỉnh hệ thống EduSubmit (API + Client + REST Client):
+![Toàn bộ kết quả chạy EduSubmit](images/full_system_result.png)
 
 ## 7. Khó khăn gặp phải và cách giải quyết
 1. **Lỗi cổng bị chiếm dụng (Address already in use):** Khi chạy thử nghiệm nhiều lần, tiến trình API cũ có thể vẫn chiếm giữ cổng 5000.  
